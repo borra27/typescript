@@ -1,0 +1,42 @@
+{
+  /**
+   * 리터럴 멤버 속성이 있는 클래스가 있다면 그 속성으로 유니온 구성원을 구별할 수 있다
+   * 이런 경우, 구별 속성에 대해 타입 가드 스타일의 검사 (==, ===, !=, !==) 또는 switch를 사용하면
+   * TypeScript가 특정한 리터럴을 가진 객체를 대상으로 한다는 것을 알아채고 타입 좁히기를 실행해준다
+   */
+  type SuccessState = {
+    result: "success";
+    response: {
+      body: string;
+    };
+  };
+  type FailState = {
+    result: "fail";
+    reason: string;
+  };
+  type LoginState = SuccessState | FailState;
+
+  function login(id: string): LoginState {
+    if (id === "user")
+      return {
+        result: "success",
+        response: {
+          body: "logged in!",
+        },
+      };
+    else
+      return {
+        result: "fail",
+        reason: "*-*",
+      };
+  }
+
+  function printLoginState(state: LoginState) {
+    // 조금 더 직관적임
+    if (state.result === "success") {
+      console.log(state.response.body);
+    } else {
+      console.log(state.reason);
+    }
+  }
+}
